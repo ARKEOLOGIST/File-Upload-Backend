@@ -9,16 +9,21 @@ const path = require('path');
 const invalid_error = new HttpError('Invalid inputs passed, please check your data.', 422);
 const db_error = new HttpError('Database issue', 500);
 
+const deletedata = async (req,res,next) => {
+    const str = "DELETE from images where id = " + req.body.id;
+    db.execute(str).then((response) => {res.status(201).json({ response: response })},res).catch((e) => {
+        console.log(e);
+});
+}
+
 const fetch = async (req,res,next) => {
-    db.execute('SELECT * from images').then((response) => {res.status(201).json({ response: response })},res).catch((e) => {
+    db.execute('SELECT * from images').then((response) => {res.status(201).json({ values: response })},res).catch((e) => {
         return next(db_error);
 });
 }
 
 
 const fileupload = async (req,res,next) => {
-    console.log(req.file);
-    console.log(req.body);
     const errors = validationResult(req.body);
     if (!errors.isEmpty()) {
         console.log(errors);
@@ -39,3 +44,4 @@ const fileupload = async (req,res,next) => {
 
 exports.fileupload = fileupload;
 exports.fetch = fetch;
+exports.deletedata = deletedata;

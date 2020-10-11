@@ -46,4 +46,6 @@ router.post(
 
 router.get('/fetch',usersController.fetch);
 
+router.post('/delete',usersController.deletedata);
+
 module.exports = router;
